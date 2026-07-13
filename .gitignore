@@ -6,6 +6,30 @@
 # See: https://github.com/github/gitignore/tree/main/Global
 #
 .utmp/
+
+# Local AI / agent workspaces and instructions
+/.agents/
+/.codex/
+/.openai/
+/.claude/
+/.cursor/
+/.continue/
+/.cline/
+/.roo/
+/.windsurf/
+/.gemini/
+/.aider*
+/AGENTS.md
+/CLAUDE.md
+/CODEX.md
+/GEMINI.md
+/.github/copilot-instructions.md
+
+# Local editor configuration
+/.vscode/
+/.idea/
+/.vsconfig
+
 /[Ll]ibrary/
 /[Tt]emp/
 /[Oo]bj/
@@ -103,8 +127,4 @@ InitTestScene*.unity*
 /[Aa]ssets/[Ii]nit[Tt]est[Ss]cene*.unity*
 
 # Auto-generated cache in Assets folder
-<<<<<<< HEAD
 /[Aa]ssets/[Ss]ceneDependencyCache*
-=======
-/[Aa]ssets/[Ss]ceneDependencyCache*
->>>>>>> 56b2a705e6fecb1cd01b56caef00e0873e827e7c

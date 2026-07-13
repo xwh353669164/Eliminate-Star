@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,18 +6,15 @@ public class GamePanel : BasePanel
     public Button btnReturn;
     public Button btnSetting;
     public Slider sliderTime;
+    public Text score;
+
     public override void Init()
     {
-        btnReturn.onClick.AddListener(() =>
-        {
-            UIManager.Instance.ShowPanel<ReturnPanel>();
-            //这里要实现游戏暂停逻辑
-            EventHandler.CallStopTimeEvent(true);
-        });
-        btnSetting.onClick.AddListener(() =>
-        {
-            UIManager.Instance.ShowPanel<SettingPanel>();
-        });
+        score.text = "0";
+        sliderTime.value = 1f;
+        SetMenuButtonsEnabled(false);
+        btnReturn.onClick.AddListener(OpenReturnPanel);
+        btnSetting.onClick.AddListener(OpenSettingPanel);
     }
 
     public override void UnInit()
@@ -31,21 +26,60 @@ public class GamePanel : BasePanel
     protected override void OnEnable()
     {
         base.OnEnable();
-        EventHandler.TimeChangeEvent += OnTimeChangEvent;
+        EventHandler.TimeChangeEvent += OnTimeChangeEvent;
+        EventHandler.ScoreChangeEvent += OnScoreChangeEvent;
+        EventHandler.GameStateChangeEvent += OnGameStateChangeEvent;
+        EventHandler.GameEndEvent += OnGameEndEvent;
     }
+
     protected override void OnDisable()
     {
+        EventHandler.TimeChangeEvent -= OnTimeChangeEvent;
+        EventHandler.ScoreChangeEvent -= OnScoreChangeEvent;
+        EventHandler.GameStateChangeEvent -= OnGameStateChangeEvent;
+        EventHandler.GameEndEvent -= OnGameEndEvent;
         base.OnDisable();
-        EventHandler.TimeChangeEvent -= OnTimeChangEvent;
     }
 
-    private void OnTimeChangEvent(float nowTime, float maxTime)
+    private void OpenReturnPanel()
     {
-        ChangeTime(nowTime / maxTime);
+        EventHandler.CallStopTimeEvent(true);
+        UIManager.Instance.ShowPanel<ReturnPanel>();
     }
 
-    public void ChangeTime(float v)
+    private void OpenSettingPanel()
     {
-        sliderTime.value = v;
+        EventHandler.CallStopTimeEvent(true);
+        UIManager.Instance.ShowPanel<SettingPanel>();
+    }
+
+    private void OnTimeChangeEvent(float nowTime, float maxTime)
+    {
+        sliderTime.value = Mathf.Clamp01(nowTime / maxTime);
+    }
+
+    private void OnScoreChangeEvent(int value)
+    {
+        score.text = value.ToString();
+    }
+
+    private void OnGameStateChangeEvent(GameState state)
+    {
+        SetMenuButtonsEnabled(state == GameState.Playing);
+    }
+
+    private void OnGameEndEvent(int finalScore, GameEndReason reason)
+    {
+        if (reason == GameEndReason.Aborted)
+            return;
+
+        EndPanel endPanel = UIManager.Instance.ShowPanel<EndPanel>();
+        endPanel.SetScore(finalScore);
+    }
+
+    private void SetMenuButtonsEnabled(bool enabled)
+    {
+        btnReturn.interactable = enabled;
+        btnSetting.interactable = enabled;
     }
 }

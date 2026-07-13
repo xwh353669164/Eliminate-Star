@@ -1186,6 +1186,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   btnClose: {fileID: 7721459165187228462}
   btnRegister: {fileID: 7576842079091310380}
+  userNameInput: {fileID: 7576842080454728810}
+  passwordInput: {fileID: 7576842080357896090}
 --- !u!1 &7576842080454728724
 GameObject:
   m_ObjectHideFlags: 0

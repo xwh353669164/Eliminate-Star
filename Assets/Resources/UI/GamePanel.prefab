@@ -1280,3 +1280,4 @@ MonoBehaviour:
   btnReturn: {fileID: 6622282089226071518}
   btnSetting: {fileID: 6622282088511217086}
   sliderTime: {fileID: 6622282088927574419}
+  score: {fileID: 6622282088467604440}

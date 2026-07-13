@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using UnityEngine.UI;
 
 public class LoadPanel : BasePanel
@@ -12,13 +9,21 @@ public class LoadPanel : BasePanel
 
     public override void Init()
     {
+        userNameInput.contentType = InputField.ContentType.Alphanumeric;
+        passwordInput.contentType = InputField.ContentType.Password;
+
         btnLoad.onClick.AddListener(() =>
         {
-            //进行校验
+            AccountResult result = LocalDataService.Instance.Login(userNameInput.text, passwordInput.text);
+            if (result != AccountResult.Success)
+            {
+                ShowMessage(GetMessage(result));
+                return;
+            }
 
-            //通过
             UIManager.Instance.HidePanel<LoadPanel>();
         });
+
         btnRegister.onClick.AddListener(() =>
         {
             UIManager.Instance.HidePanel<LoadPanel>();
@@ -32,5 +37,26 @@ public class LoadPanel : BasePanel
         btnRegister.onClick.RemoveAllListeners();
         userNameInput.onEndEdit.RemoveAllListeners();
         passwordInput.onEndEdit.RemoveAllListeners();
+    }
+
+    private void ShowMessage(string message)
+    {
+        passwordInput.text = string.Empty;
+        passwordInput.placeholder.GetComponent<Text>().text = message;
+    }
+
+    private static string GetMessage(AccountResult result)
+    {
+        switch (result)
+        {
+            case AccountResult.InvalidFormat:
+                return "账号和密码只能使用字母或数字";
+            case AccountResult.AccountNotFound:
+                return "账号不存在";
+            case AccountResult.PasswordIncorrect:
+                return "密码错误";
+            default:
+                return string.Empty;
+        }
     }
 }

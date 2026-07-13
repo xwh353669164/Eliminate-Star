@@ -371,6 +371,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   btnClose: {fileID: 9182585974347094907}
+  content: {fileID: 9182585975079827165}
 --- !u!1 &9182585973867129572
 GameObject:
   m_ObjectHideFlags: 0
